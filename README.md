@@ -197,7 +197,7 @@ module tb_mem16x4_combo;
 endmodule
 ```
 
-\</details\>
+
 
 -----
 
