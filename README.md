@@ -52,9 +52,14 @@ The design consists of three main logical blocks: a combinational ROM, a sequent
 1.  **ROM Block**: The 16x4 ROM is implemented as pure combinational logic using a series of ternary operators. The `addr` input directly selects one of the 16 pre-defined parameter values, which is then fed to the selection logic.
 2.  **RAM Block**: The 16x4 RAM is described as a register array (`reg [3:0] ram [0:15];`). The logic is enclosed in a clocked `always` block, allowing the synthesis tool to infer it as on-chip distributed memory. The synchronous write operation is gated by both `sel` and `we`.
 3.  **Output Stage**: A multiplexer, controlled by the `sel` signal, chooses between the output of the ROM (`rom_word`) and the RAM (`ram[addr]`). This selected value is then fed to the final output register `dout`. This registered output ensures a clean, synchronous output and prevents combinational delays from propagating to downstream modules.
+<img width="2048" height="2048" alt="Gemini_Generated_Image_w4ptrw4ptrw4ptrw" src="https://github.com/user-attachments/assets/aa11d783-07a6-4eee-8ba6-578b0222c7f2" />
+
 
 ### RTL Schematic
-
+<img width="1387" height="894" alt="schematic1" src="https://github.com/user-attachments/assets/6f2dc116-e999-40ed-ae56-13ea8a0ea903" />
+<img width="1387" height="894" alt="schematic2" src="https://github.com/user-attachments/assets/332d7acb-67cc-49c9-b569-a41be676dd4d" />
+<img width="1387" height="894" alt="schematic3" src="https://github.com/user-attachments/assets/e6b02e46-d128-49fa-9b21-c6ac9ab2958f" />
+<img width="1387" height="894" alt="schematic4" src="https://github.com/user-attachments/assets/b2b3d32c-8ec2-47cf-9307-041ab5f5347f" />
 The post-synthesis schematic visualizes the hardware inferred by the Vivado tool. Key components are:
 
   - **IBUF/OBUF**: Input and output buffers for the FPGA pads.
@@ -69,8 +74,7 @@ The post-synthesis schematic visualizes the hardware inferred by the Vivado tool
 
 The project consists of the core memory module and a dedicated testbench for verification.
 
-\<details\>
-\<summary\>\<strong\>Click to view Verilog Module: mem16x4\_combo.v\</strong\>\</summary\>
+##Verilog_Code
 
 ```verilog
 `timescale 1ns/1ps
@@ -139,11 +143,7 @@ module mem16x4_combo #(
 endmodule
 `default_nettype wire
 ```
-
-\</details\>
-
-\<details\>
-\<summary\>\<strong\>Click to view Testbench: tb\_mem16x4\_combo.v\</strong\>\</summary\>
+##Testbench 
 
 ```verilog
 `timescale 1ns/1ps
@@ -213,6 +213,8 @@ The design was verified using the provided testbench, which covers the following
 ### Simulation Waveform Analysis
 
 The waveform below, generated from the testbench, confirms correct logical operation.
+<img width="1387" height="894" alt="testbench" src="https://github.com/user-attachments/assets/c6aeed92-2f2a-47ef-851b-be83e88ad08a" />
+
 
   - **0-30 ns**: `sel=0` (ROM mode). The testbench cycles through addresses `0`, `3`, and `10`. The output `dout` correctly shows the expected ROM values (`A`, `D`, `7`) one clock cycle after each address change.
   - **30-50 ns**: `sel=1` (RAM mode).
@@ -231,9 +233,9 @@ The Verilog code was synthesized and implemented on a Xilinx FPGA using Vivado. 
 
 The synthesis and implementation processes were run successfully without critical warnings or errors, as shown in the tool logs.
 
-| Synthesis Log Snippet | TCL Console Log |
-| :---: | :---: |
-|  |  |
+<img width="1854" height="1168" alt="log" src="https://github.com/user-attachments/assets/9e588ade-3b31-48c5-85cf-3b336d9d9f69" />
+<img width="1854" height="1168" alt="log1" src="https://github.com/user-attachments/assets/5823b129-9b06-4d76-bcdc-36156c191fa2" />
+<img width="1854" height="1168" alt="log2" src="https://github.com/user-attachments/assets/1f78f3aa-94c5-49c1-83ea-a005fbdaddd7" />
 
 ### Resource Utilization
 
@@ -244,20 +246,19 @@ The design is lightweight and consumes minimal FPGA resources. The synthesis too
   - **Buffers**: 12 IBUF, 4 OBUF, 1 BUFG
 
 ### Timing Analysis
+<img width="1854" height="1168" alt="timing" src="https://github.com/user-attachments/assets/56dbdbff-bb18-45e7-bbbc-4c8162a22114" />
 
 No timing constraints (clock period, I/O delays) were provided, so the tool did not perform a constrained timing analysis. The reported slack is infinite, indicating all paths are analyzed as unconstrained. For a real-world application, a `create_clock` constraint would be added.
 
 ### Power Analysis
-
+<img width="1854" height="1168" alt="power" src="https://github.com/user-attachments/assets/dc94ff2a-274d-4254-9a1a-d203fa42f48b" />
 The power analysis estimates a **Total On-Chip Power of 1.663 W**. The breakdown shows that the vast majority (94%) of this power is consumed by I/O, which is typical for small designs where static power and internal logic switching are minimal compared to driving external pins.
 
 ### Physical Implementation (Device View)
 
 The images below show the final placement of the synthesized logic on the FPGA fabric. This view confirms the physical realization of the design, with logic elements placed and routed by the tool.
-
-| Device View (Zoomed Out) | Device View (Zoomed In) |
-|:---:|:---:|
-|  |  |
+<img width="1854" height="1168" alt="synthesis1" src="https://github.com/user-attachments/assets/a08ec698-b6a3-411d-8cff-32f826b622dd" />
+<img width="1854" height="1168" alt="synthesis2" src="https://github.com/user-attachments/assets/1be9773f-4861-4280-91b8-9664a46a5426" />
 
 -----
 
